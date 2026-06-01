@@ -915,8 +915,8 @@ function submitForm(){
   .then(function(r){return r.json().then(function(d){return{ok:r.ok,data:d};});})
   .then(function(res){
     if(res.ok){
-      btn.textContent='SENT! \u2738';btn.style.background='var(--mint-dark)';
-      fb.textContent='\u2738 Message sent! I\'ll get back to you soon.';
+      btn.textContent='SENT!';btn.style.background='var(--mint-dark)';
+      fb.textContent='Message sent! I\'ll get back to you soon.';
       fb.className='success';fb.style.display='block';
       // Clear form fields
       document.getElementById('form-name').value='';
