@@ -872,6 +872,24 @@ function jumpCard(n){
 }
 function jumpToCard(n){jumpCard(n);}
 
+function stopVidEmbed(n) {
+  var wrap = document.querySelector('[data-vid]');
+  // Find vid-embed-wrap in this card's body
+  var body = document.getElementById('pb-'+n);
+  if (!body) return;
+  var wraps = body.querySelectorAll('.vid-embed-wrap');
+  wraps.forEach(function(wrap) {
+    var iframe = wrap.querySelector('iframe');
+    if (iframe) {
+      iframe.remove();
+      wrap.querySelector('.vid-thumb').style.display = '';
+      wrap.querySelector('.vid-play-btn').style.display = '';
+      wrap.style.cursor = 'pointer';
+      wrap.onclick = function(){ loadVidEmbed(wrap.querySelector('.vid-play-btn')); };
+    }
+  });
+}
+
 function toggleCard(n){
   const body=document.getElementById('pb-'+n);
   const isOpen=body.classList.contains('open');
@@ -882,7 +900,7 @@ function toggleCard(n){
         const b=document.getElementById('pb-'+i);
         if(b&&b.classList.contains('open')){
           const t=document.getElementById('ptr-'+i);
-          const tg=document.getElementById('pt-'+i);
+          const tg=document.getElementById('pt-'+i);stopVidEmbed(i);
           const cw=document.getElementById('carw-'+i);
           b.classList.remove('open');
           if(t)t.classList.remove('open');
@@ -1740,17 +1758,19 @@ function lbKeyHandler(e) {
 
 function loadVidEmbed(btn) {
   var wrap = btn.closest('.vid-embed-wrap');
+  if (wrap.querySelector('iframe')) return; // already loaded
   var vidId = wrap.dataset.vid;
-  // Hide thumb, play btn, label
   wrap.querySelector('.vid-thumb').style.display = 'none';
   wrap.querySelector('.vid-play-btn').style.display = 'none';
   var label = wrap.querySelector('div:last-child');
   if (label) label.style.display = 'none';
-  // Create and inject iframe
+  wrap.style.cursor = 'default';
+  wrap.onclick = null; // remove click handler so iframe controls work
   var iframe = document.createElement('iframe');
   iframe.src = 'https://www.youtube-nocookie.com/embed/' + vidId + '?autoplay=1&rel=0';
   iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-  iframe.allowFullscreen = true;
+  iframe.setAttribute('allowfullscreen', '');
+  iframe.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:none;';
   wrap.appendChild(iframe);
 }
 
