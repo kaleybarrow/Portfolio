@@ -873,17 +873,14 @@ function jumpCard(n){
 function jumpToCard(n){jumpCard(n);}
 
 function stopVidEmbed(n) {
-  var wrap = document.querySelector('[data-vid]');
-  // Find vid-embed-wrap in this card's body
   var body = document.getElementById('pb-'+n);
   if (!body) return;
-  var wraps = body.querySelectorAll('.vid-embed-wrap');
-  wraps.forEach(function(wrap) {
+  body.querySelectorAll('.vid-embed-wrap').forEach(function(wrap) {
     var iframe = wrap.querySelector('iframe');
     if (iframe) {
       iframe.remove();
-      wrap.querySelector('.vid-thumb').style.display = '';
-      wrap.querySelector('.vid-play-btn').style.display = '';
+      wrap.querySelector('.vid-thumb').style.display = 'block';
+      wrap.querySelector('.vid-play-btn').style.display = 'flex';
       wrap.style.cursor = 'pointer';
       wrap.onclick = function(){ loadVidEmbed(wrap.querySelector('.vid-play-btn')); };
     }
